@@ -22,7 +22,8 @@
   "dependencies": {
     "canvas": ">= 0.7.0",
     "jsdom": ">= 0.6.0",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "xmldom": "~0.1.16"
   },
   "devDependencies": {
     "uglify-js": "~2.3.6",
