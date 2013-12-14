@@ -10722,12 +10722,27 @@ new function() {
 		return item;
 	}
 
+	function parsePoints(str) {
+		var result = [],
+			trimed, xy;
+
+		str.split(' ').forEach(function (element, index, array) {
+			trimed = element.trim();
+			if (trimed !== '') {
+				xy = trimed.split(',');
+				result.push([parseFloat(xy[0]), parseFloat(xy[1])]);
+			}
+		});
+
+		return result;
+	}
+
 	function importPoly(node, type) {
 		var path = new Path(),
-			points = node.points;
-		path.moveTo(points.getItem(0));
-		for (var i = 1, l = points.numberOfItems; i < l; i++)
-			path.lineTo(points.getItem(i));
+			points = parsePoints(findAttribute(node, 'points').value);
+		path.moveTo(points[0]);
+		for (var i = 1, l = points.length; i < l; i++)
+			path.lineTo(points[i]);
 		if (type === 'polygon')
 			path.closePath();
 		return path;
