@@ -9329,7 +9329,6 @@ XMLSerializer.prototype.serializeToString = function(node) {
 	return text;
 };
 
-/*
 function DOMParser() {
 }
 
@@ -9338,9 +9337,6 @@ DOMParser.prototype.parseFromString = function(string, contenType) {
 	div.innerHTML = string;
 	return div.firstChild;
 };
-*/
-
-var DOMParser = require('xmldom').DOMParser;
 
 var DomElement = new function() {
 
@@ -10743,10 +10739,12 @@ new function() {
 
 	function importPoly(node, type) {
 		var path = new Path(),
-			points = parsePoints(findAttribute(node, 'points').value);
+			points = parsePoints(node.getAttribute('points'));
+
 		path.moveTo(points[0]);
-		for (var i = 1, l = points.length; i < l; i++)
+		for (var i = 1, l = points.length; i < l; i++) {
 			path.lineTo(points[i]);
+		}
 		if (type === 'polygon')
 			path.closePath();
 		return path;
@@ -10813,7 +10811,7 @@ new function() {
 		radialgradient: importGradient,
 
 		image: function (node) {
-			var raster = new Raster(getValue(node, 'href', true));
+			var raster = new Raster(getValue(node, 'xlink:href', true));
 			raster.attach('load', function() {
 				var size = getSize(node, 'width', 'height');
 				this.setSize(size);
@@ -10831,7 +10829,7 @@ new function() {
 		defs: importGroup,
 
 		use: function(node) {
-			var id = (getValue(node, 'href', true) || '').substring(1),
+			var id = (getValue(node, 'xlink:href', true) || '').substring(1),
 				definition = definitions[id],
 				point = getPoint(node, 'x', 'y');
 			return definition
@@ -10857,8 +10855,6 @@ new function() {
 			var point = getPoint(node, 'x', 'y'),
 				size = getSize(node, 'width', 'height'),
 				radius = getSize(node, 'rx', 'ry');
-			if (isNaN(radius.width)) radius.width = 0;
-			if (isNaN(radius.height)) radius.height = 0;
 			return new Shape.Rectangle(new Rectangle(point, size), radius);
 		},
 
@@ -10997,21 +10993,12 @@ new function() {
 		}
 	});
 
-	function findAttribute(node, name) {
-		for (var i = 0; i < node.attributes.length; i++) {
-			if (node.attributes[i].name === name) {
-				return node.attributes[i];
-			}
-		}
-		return undefined;
-	}
-
 	function getAttribute(node, name, styles) {
-		var attr = findAttribute(node, name),
+		var attr = node.attributes[name],
 			value = attr && attr.value;
 		if (!value) {
 			var style = Base.camelize(name);
-			value = node.style ? node.style[style] : undefined;
+			value = node.style[style];
 			if (!value && styles.node[style] !== styles.parent[style])
 				value = styles.node[style];
 		}
