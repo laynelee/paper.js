@@ -10972,7 +10972,7 @@ new function() {
 					: parseFloat(value));
 		},
 
-		viewBox: function(item, value, name, node, styles) {
+		viewbox: function(item, value, name, node, styles) {
 			var rect = new Rectangle(convertValue(value, 'array')),
 				size = getSize(node, 'width', 'height', true);
 			if (item instanceof Group) {
