@@ -9333,9 +9333,10 @@ function DOMParser() {
 }
 
 DOMParser.prototype.parseFromString = function(string, contenType) {
-	var div = document.createElement('div');
-	div.innerHTML = string;
-	return div.firstChild;
+	document = jsdom.jsdom(string);
+	window = document.createWindow();
+	navigator = window.navigator;
+	return document.getElementsByTagName('svg')[0];
 };
 
 var DomElement = new function() {
