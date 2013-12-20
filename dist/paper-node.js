@@ -1691,8 +1691,8 @@ var Rectangle = Base.extend({
 	},
 
 	getCenter: function() {
-		return new (arguments[0] ? Point : LinkedPoint)
-				(this.getCenterX(), this.getCenterY(), this, 'setCenter');
+		return  arguments[0] ? new Point(this.getCenterX(), this.getCenterY(), this, 'setCenter') : 
+							   new LinkedPoint(this.getCenterX(), this.getCenterY(), this, 'setCenter');
 	},
 
 	setCenter: function(point) {
